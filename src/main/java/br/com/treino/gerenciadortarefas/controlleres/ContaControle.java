@@ -35,6 +35,7 @@ public class ContaControle {
 	public ModelAndView registrar(@Valid User user, BindingResult result) {
 		ModelAndView mv = new ModelAndView();
 		User usuario = servicoUser.buscarPorEmail(user.getEmail());
+		
 		if(usuario!=null) {
 			result.rejectValue("email", "", "Usuário já cadastrado");
 		}

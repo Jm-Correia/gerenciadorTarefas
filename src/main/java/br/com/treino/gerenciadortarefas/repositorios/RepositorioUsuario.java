@@ -1,5 +1,6 @@
 package br.com.treino.gerenciadortarefas.repositorios;
 
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.treino.gerenciadortarefas.modelos.User;

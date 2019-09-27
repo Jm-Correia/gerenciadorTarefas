@@ -25,8 +25,8 @@ import br.com.treino.gerenciadortarefas.servicos.ServicoUser;
 @RequestMapping("/tarefas")
 public class TarefasController {
 
-	@Autowired
-	private RepositorioTarefa repositorioTarefa;
+//	@Autowired
+//	private RepositorioTarefa repositorioTarefa;
 	
 	@Autowired
 	private ServicoUser servicoUser;
@@ -37,6 +37,7 @@ public class TarefasController {
 		mv.setViewName("/tarefas/listar");
 		String emailUser = request.getUserPrincipal().getName();
 		//mv.addObject("tarefa", repositorioTarefa.findAll(new Sort(Sort.Direction.ASC,"titulo")));
+		//mv.addObject("usuario", servicoUser.listar()); # AQUI MAGO
 		mv.addObject("tarefa", repositorioTarefa.carregarTarefasPorUser(emailUser));
 		return mv;
 	}
@@ -58,6 +59,11 @@ public class TarefasController {
 			
 		}
 		
+//		if(user.getEmail == null) {
+//			result.rejectValue("email", "tarefa.dataExpiracaoInvalida", "A data de expiração é obrigatório");
+//			
+//		}
+		
 		if(tarefa.getDataExpiracao().before(new Date())) {
 			result.rejectValue("dataExpiracao", "tarefa.dataExpiracaoInvalida", "A data de expiração não pode ser anterior à data atual.");
 		}
@@ -65,9 +71,12 @@ public class TarefasController {
 			mv.setViewName("tarefas/inserir");
 			mv.addObject("tarefa",tarefa);
 		}else {
-			String emailUser = request.getUserPrincipal().getName();
-			User usuarioLogado = servicoUser.buscarPorEmail(emailUser);
-			tarefa.setUser(usuarioLogado);
+//			String emailUser = request.getUserPrincipal().getName();
+//			User usuarioLogado = servicoUser.buscarPorEmail(emailUser);
+//			tarefa.setUser(usuarioLogado);
+			/**
+			 * consultar se o email existe {aqui tu nao precisa verificar id}
+			 */
 			mv.setViewName("redirect:/tarefas/listar");
 			repositorioTarefa.save(tarefa);
 		}
@@ -94,10 +103,17 @@ public class TarefasController {
 		if(tarefa.getDataExpiracao().before(new Date())) {
 			result.rejectValue("dataExpiracao", "tarefa.dataExpiracaoInvalida", "A data de expiração não pode ser anterior à data atual.");
 		}
+		
+		//email ==null
+		
 		if(result.hasErrors()) {
 			mv.setViewName("tarefas/alterar");
 			mv.addObject("tarefa",tarefa);
 		}else {
+			/**
+			 * verificar se email existe {retorno o mesmo id}
+			 * user.getID equal usuario.getID
+			 */
 			mv.setViewName("redirect:/tarefas/listar");
 			repositorioTarefa.save(tarefa);
 		}
@@ -110,12 +126,12 @@ public class TarefasController {
 		return "redirect:/tarefas/listar";
 	}
 	
-	@GetMapping("/concluir/{id}")
-	public String concluir(@PathVariable("id") Long id) {
-		Tarefa tarefa = repositorioTarefa.getOne(id);
-		tarefa.setConcluida(true);
-		repositorioTarefa.save(tarefa);
-		return "redirect:/tarefas/listar";
-	}
+//	@GetMapping("/concluir/{id}")
+//	public String concluir(@PathVariable("id") Long id) {
+//		Tarefa tarefa = repositorioTarefa.getOne(id);
+//		tarefa.setConcluida(true);
+//		repositorioTarefa.save(tarefa);
+//		return "redirect:/tarefas/listar";
+//	}
 	
 }
